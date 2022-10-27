@@ -40,17 +40,38 @@ void print(struct node *list){
 
 void modByN(int arr[MAX], int n){
     struct node* temparr[n];
+    int count[n];
+    int result = 0;
+    int min = 1000;
+    int max = 0;
+    double avg = 0;
+    int total = 0;
     for (int i = 0; i < n; i++){
         temparr[i] = NULL;
+        count[i] = 0;
     }
     for (int j = 0; j < MAX; j++){
-        int result = arr[j] % n;
+        int result = arr[j]%n;
         insert(&temparr[result], arr[j]);
+        count[result]++;
     }
     for (int k = 0; k < n; k++){
         printf("%d: ", k);
         print(temparr[k]);
+        
+        if (count[k] > max){
+            max = count[k];
+        }
+        if (count[k] < min){
+            min = count[k];
+        }
+        total += count[k];
+        avg = total/n;
+        printf("\n");
     }
+    printf("The shortest chain's length: %d\n", min);
+    printf("The longest chain's length: %d\n", max);
+    printf("The average length of chains: %.2f\n\n", avg);
 }
 
 int main(){
