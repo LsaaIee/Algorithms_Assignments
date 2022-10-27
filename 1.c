@@ -9,18 +9,17 @@ struct node{
     int data;
     struct node* next;
 };
-struct node *lst = NULL;
 
 void insert(struct node **list, int x){
-    struct node *newNode = malloc(sizeof(struct node));
+    struct node *newNode = (struct node*)malloc(sizeof(struct node));
     newNode->data = x;
     newNode->next = NULL;
 
-    if (lst == NULL){
-        lst = newNode;
+    if (*list == NULL){
+        *list = newNode;
     }
     else{
-        struct node *lastNode = lst;
+        struct node *lastNode = *list;
         while (lastNode->next != NULL){
             lastNode = lastNode->next;
         }
@@ -29,14 +28,14 @@ void insert(struct node **list, int x){
     checkVal++;
 }
 
-void print(int n, int temparr[n]){
-    struct node *temp = lst;
+void print(struct node *list){
+    struct node *temp = list;
 
-    while (temp != NULL){
+    while (temp){
         printf("%d -> ", temp->data);
         temp = temp->next;
     }
-    printf("NULL\n");
+    printf("\n");
 }
 
 void modByN(int arr[MAX], int n){
@@ -45,20 +44,20 @@ void modByN(int arr[MAX], int n){
         temparr[i] = NULL;
     }
     for (int j = 0; j < MAX; j++){
-        int result = arr[j]%n;
+        int result = arr[j] % n;
         insert(&temparr[result], arr[j]);
-        printf("%d -> ", temparr[j]);
     }
-    printf("NULL");
+    for (int k = 0; k < n; k++){
+        printf("%d: ", k);
+        print(temparr[k]);
+    }
 }
 
 int main(){
-    struct node *lst = NULL;
-
     int temp[MAX];
     int n;
     srand(time(NULL));
-    for(int i = 0; i < 60; i++){
+    for(int i = 0; i < 50; i++){
         temp[i] = rand()%1000;
         for (int j = 0; j < i-1; j++){
             if (temp[j] == temp[i]){
@@ -67,6 +66,9 @@ int main(){
             }
         }
     }
-    modByN(&temp[MAX], 5);
+
+    modByN(temp, 5);
+    modByN(temp, 7);
+    modByN(temp, 13);   
     return 0;
 }
