@@ -3,71 +3,70 @@
 #include <time.h>
 #define MAX 50
 
-struct items{
-    int key;
-    int value;
+int checkVal;
+
+struct node{
+    int data;
+    struct node* next;
 };
+struct node *lst = NULL;
 
-struct items* hashArray5[5];
-struct items* hashArray7[7];
-struct items* hashArray13[13];
-struct items* dummyItem;
-struct items* item;
+void insert(struct node **list, int x){
+    struct node *newNode = malloc(sizeof(struct node));
+    newNode->data = x;
+    newNode->next = NULL;
 
-int modFive(int key){
-    return (key%5);
-}
-
-struct items *serch(int key){
-    int hashIndex = modFive(key);
-    while (hashArray5[hashIndex] != NULL){
-        if (hashArray5[hashIndex]->key == key){
-            return hashArray5[hashIndex];
+    if (lst == NULL){
+        lst = newNode;
+    }
+    else{
+        struct node *lastNode = lst;
+        while (lastNode->next != NULL){
+            lastNode = lastNode->next;
         }
-        ++hashIndex;
-        hashIndex %= 5;
+        lastNode->next = newNode;
     }
-    return NULL;
+    checkVal++;
 }
 
-void insert(int key, int value){
-    struct items *item = (struct items*)malloc(sizeof(struct items));
-    item->value = value;
-    item->key = key; 
+void print(int n, int temparr[n]){
+    struct node *temp = lst;
 
-    int hashIndex = modFive(key);
-
-    while (hashArray5[hashIndex] != NULL && hashArray5[hashIndex]->key != -1){
-        ++hashIndex;
-        hashIndex %= 5;
+    while (temp != NULL){
+        printf("%d -> ", temp->data);
+        temp = temp->next;
     }
-    hashArray5[hashIndex] = item;
+    printf("NULL\n");
 }
 
-void display() {
-   int i = 0;
-	
-   for(i = 0; i < 5; i++) {
-	
-      if(hashArray5[i] != NULL)
-         printf(" (%d,%d)",hashArray5[i]->key, hashArray5[i]->value);
-      else
-         printf(" ~~ ");
-   }
-	
-   printf("\n");
+void modByN(int arr[MAX], int n){
+    struct node* temparr[n];
+    for (int i = 0; i < n; i++){
+        temparr[i] = NULL;
+    }
+    for (int j = 0; j < MAX; j++){
+        int result = arr[j]%n;
+        insert(&temparr[result], arr[j]);
+        printf("%d -> ", temparr[j]);
+    }
+    printf("NULL");
 }
 
 int main(){
-    dummyItem = (struct items*)malloc(sizeof(struct items));
-    dummyItem->key = -1;
-    dummyItem->value = -1;
-    srand(time(NULL));
-    int temp[MAX];
+    struct node *lst = NULL;
 
-    for (int i = 0; i < MAX; i++){
+    int temp[MAX];
+    int n;
+    srand(time(NULL));
+    for(int i = 0; i < 60; i++){
         temp[i] = rand()%1000;
+        for (int j = 0; j < i-1; j++){
+            if (temp[j] == temp[i]){
+                i--;
+                break;
+            }
+        }
     }
-    display();
+    modByN(&temp[MAX], 5);
     return 0;
 }
