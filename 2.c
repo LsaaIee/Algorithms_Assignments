@@ -10,10 +10,12 @@ void print(int arr[], int size){
     }
 }
 
-void hashFunc1(int arr[MAX]){
+int hashFunc1(int arr[MAX]){
     int temparr[LENGTH]; //hash table
     int linearProbing = 0; //(h'k+i)%LENGTH
-    int probeCount1 = 0;
+    double probeCount1 = 0;
+    double avgCount1 = 0;
+    int clusterCount1 = 0;
     
     for (int i = 0; i < LENGTH; i++){
         temparr[i] = -1;
@@ -25,19 +27,26 @@ void hashFunc1(int arr[MAX]){
         while (temparr[(result+k)%LENGTH] != -1){
             k++;
             probeCount1++;
+            clusterCount1++;
         }
         linearProbing = (result+k)%LENGTH;
         temparr[linearProbing] = arr[j];
         probeCount1++;
     }
     print(temparr, LENGTH);
-    printf("\n%d\n", probeCount1);
+    avgCount1 = probeCount1/MAX;
+    printf("\nAverage Number of probes: %.2f\n", avgCount1);
+    printf("%d\n", clusterCount1);
+
+    return clusterCount1;
 }
 
-void hashFunc2(int arr[MAX]){
+int hashFunc2(int arr[MAX]){
     int temparr[LENGTH];
-    int probeCount2 = 0;
+    double probeCount2 = 0;
     int quadraticProbing = 0;
+    double avgCount2 = 0;
+    int clusterCount2 = 0;
     
     for (int i = 0; i < LENGTH; i++){
         temparr[i] = -1;
@@ -49,19 +58,26 @@ void hashFunc2(int arr[MAX]){
         while (temparr[(result+k+3*k*k)%LENGTH] != -1){
             k++;
             probeCount2++;
+            clusterCount2++;
         }
         quadraticProbing = (result+k+3*k*k)%LENGTH;
         temparr[quadraticProbing] = arr[j];
         probeCount2++;
     }
     print(temparr, LENGTH);
-    printf("\n%d\n", probeCount2);
+    avgCount2 = probeCount2/MAX;
+    printf("\nAverage Number of probes: %.2f\n", avgCount2);
+    printf("%d\n", clusterCount2);
+
+    return clusterCount2;
 }
 
-void hashFunc3(int arr[MAX]){
+int hashFunc3(int arr[MAX]){
     int temparr[LENGTH];
     int doubleHashing = 0;
-    int probeCount3 = 0;
+    double probeCount3 = 0;
+    double avgCount3 = 0;
+    int clusterCount3 = 0;
     
     for (int i = 0; i < LENGTH; i++){
         temparr[i] = -1;
@@ -73,18 +89,36 @@ void hashFunc3(int arr[MAX]){
         while (temparr[(result1+k*result2)%LENGTH] != -1){
             k++;
             probeCount3++;
+            clusterCount3++;
         }
         doubleHashing = (result1+k*result2)%LENGTH;
         temparr[doubleHashing] = arr[j];
         probeCount3++;
     }
     print(temparr, LENGTH);
-    printf("\n%d\n", probeCount3);
+    avgCount3 = probeCount3/MAX;
+    printf("\nAverage Number of probes: %.2f\n", avgCount3);
+    printf("%d\n", clusterCount3);
+
+    return clusterCount3;
+}
+
+int compare(int clusterCount1, int clusterCount2, int clusterCount3){
+    int maxCluster = 0;
+    if (clusterCount1 > clusterCount2 && clusterCount1 > clusterCount3){
+        maxCluster = clusterCount1;
+    }
+    else if (clusterCount2 > clusterCount1 && clusterCount2 > clusterCount3){
+        maxCluster = clusterCount2;
+    }
+    else if (clusterCount3 > clusterCount1 && clusterCount3 > clusterCount2){
+        maxCluster = clusterCount3;
+    }
+    return maxCluster;
 }
 
 int main(){
     int temp[MAX];
-    int n;
     srand(time(NULL));
     for(int i = 0; i < MAX; i++){
         temp[i] = rand()%1000;
@@ -95,12 +129,18 @@ int main(){
             }
         }
     }
+    printf("Randomly Generated Numbers:\n");
     print(temp, MAX);
     printf("\n\n");
-    hashFunc1(temp);
+    printf("Hash Table for Linear Probing:\n");
+    int n1 = hashFunc1(temp);
     printf("\n\n");
-    hashFunc2(temp);
+    printf("Hash Table for Quadratic Probing:\n");
+    int n2 = hashFunc2(temp);
     printf("\n\n");
-    hashFunc3(temp);
-    printf("\n\n");
+    printf("Hash Table for Double Hashing:\n");
+    int n3 = hashFunc3(temp);
+    
+    int max = compare(n1, n2, n3);
+    printf("\nPrimary Cluster Length: %d", max);
 }
