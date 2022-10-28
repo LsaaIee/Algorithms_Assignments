@@ -33,7 +33,7 @@ void hashFunc1(int arr[MAX]){
     print(temparr, LENGTH);
     printf("\n%d\n", probeCount1);
 }
-/*
+
 void hashFunc2(int arr[MAX]){
     int temparr[LENGTH];
     int probeCount2 = 0;
@@ -42,10 +42,11 @@ void hashFunc2(int arr[MAX]){
     for (int i = 0; i < LENGTH; i++){
         temparr[i] = -1;
     }
+
     for (int j = 0; j < MAX; j++){
         int result = arr[j]%LENGTH;
         int k = 0;
-        while (temparr[(result+j+3*j*j)%LENGTH] != -1){
+        while (temparr[(result+k+3*k*k)%LENGTH] != -1){
             k++;
             probeCount2++;
         }
@@ -56,7 +57,7 @@ void hashFunc2(int arr[MAX]){
     print(temparr, LENGTH);
     printf("\n%d\n", probeCount2);
 }
-*/
+
 void hashFunc3(int arr[MAX]){
     int temparr[LENGTH];
     int doubleHashing = 0;
@@ -82,10 +83,9 @@ void hashFunc3(int arr[MAX]){
 }
 
 int main(){
-    //int temp[MAX];
-    int temp[MAX] = {382, 524, 291, 915, 80, 104, 106, 120, 667, 485, 612, 845, 913, 41, 921, 570, 533, 396, 482, 350, 618, 52, 227, 546, 379, 265, 801, 391, 461, 278}; //main array with keys
+    int temp[MAX];
     int n;
-    /*srand(time(NULL));
+    srand(time(NULL));
     for(int i = 0; i < MAX; i++){
         temp[i] = rand()%1000;
         for (int j = 0; j < i-1; j++){
@@ -94,7 +94,7 @@ int main(){
                 break;
             }
         }
-    }*/
+    }
     print(temp, MAX);
     printf("\n\n");
     hashFunc1(temp);
