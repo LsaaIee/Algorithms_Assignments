@@ -67,7 +67,7 @@ void hashFunc3(int arr[MAX]){
     }
     for (int j = 0; j < MAX; j++){
         int result1 = arr[j]%LENGTH;
-        int result2 = 1+(arr[j]%(LENGTH+1));
+        int result2 = 1+(arr[j]%(LENGTH-1));
         int k = 0;
         while (temparr[(result1+k*result2)%LENGTH] != -1){
             k++;
@@ -99,8 +99,8 @@ int main(){
     printf("\n\n");
     hashFunc1(temp);
     printf("\n\n");
-    //hashFunc2(temp);
-    //printf("\n\n");
+    hashFunc2(temp);
+    printf("\n\n");
     hashFunc3(temp);
     printf("\n\n");
 }
