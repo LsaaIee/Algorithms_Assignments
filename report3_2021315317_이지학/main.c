@@ -5,34 +5,52 @@
 #define NAME 10
 #define MAX 30
 
+char *removeSpace(char *str){
+    int i = 0, j = 0;
+    while (str[i]){
+        if (str[i] != ' '){
+            str[j++] = str[i];
+        }
+        i++;
+    }
+    str[j] = '\0';
+
+    return str;
+}
+
+
 int main(){
-    char line[MAX], name[NAME], source[2], dest[2]
-    int date, i, j, ctr;
-    char token[MAX][MAX];
+    char line[MAX], name[NAME], source[2], dest[2], temp[MAX];
+    int date, i = 0;
+    char *token;
+
     
-    scanf("%[^\n]", line);
+    gets(line);
+    removeSpace(line);
     printf("%s\n", line);
-    int len = strlen(line);
-
-    j = 0; ctr = 0;
-    for (i = 0; i < len; i++){
-        if ((line[i] == ' ') || line[i] == '\0'){
-            token[ctr][j] = '\0';
-            ctr++;
-            j = 0;
+    token = strtok(line, ",");
+    
+    while (token != NULL){
+        if (i == 0){
+            strcpy(name, token);
         }
-        else {
-            token[ctr][j] = line[i];
-            j++;
+        else if (i == 1){
+            strcpy(source, token);
         }
-
-        date = atoi(line);
+        else if (i == 2){
+            strcpy(source, token);
+        }
+        else if (i == 3){
+            date = atoi(token);
+        }
+        i++;
+        token = strtok(NULL, ",");
     }
-
-    for (i = 0; i < ctr; i++){
-        printf("%s\n", token[i]);
-    }
+    
+    printf("%s\n", name);
+    printf("%c\n", source);
+    printf("%c\n", dest);
     printf("%d", date);
-
+    
     return 0;
 }
