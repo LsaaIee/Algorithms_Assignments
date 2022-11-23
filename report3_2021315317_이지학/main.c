@@ -11,25 +11,15 @@ struct node {
 
     struct node *left, *right, *parent;
 };
-/*
-void input(char name[], char source[], char dest[], int date){
-    int i = 0;
-    while (i != 11){
-        printf("Input your name, source, destination, and date in order: \n");
-        while (scanf("%10[^,], %1[^,], %1[^,], %d", name, source, dest, &date) == 4){
-            printf("%s\n", name);
-            printf("%s\n", source);
-            printf("%s\n", dest);
-            printf("%d\n", date);
-            printf("----------------------------------------------------------------------------------\n");
-            rbPrint();
-            rbInsert();
-            break;
-        }
-        i++;
+
+void inorder(struct node *root){
+    if (root == NULL){
+        return;
     }
+    inorder(root->left);
+    printf("%d(%c) ", root->data, root->color);
+    inorder(root->right);
 }
-*/
 void leftRotate(struct node **root, struct node *x){
     struct node *y = x->right;
     x->right = y->left;
@@ -76,37 +66,58 @@ void rightRotate(struct node **root, struct node *y){
 }
 
 void insertFixup(struct node **root, struct node *z){
-    while (z != *root && z->parent->color == 'R'){
+    // iterate until z is not the root and z's parent color is red
+    while (z != *root && z->parent->color == 'R')
+    {
         struct node *y;
-        if (z->parent == z->parent->parent->left){
+ 
+        // Find uncle and store uncle in y
+        if (z->parent == z->parent->parent->left)
             y = z->parent->parent->right;
-        }
-        else {
+        else
             y = z->parent->parent->left;
-        }
-
-        if (y->color == 'R'){
+ 
+        // If uncle is RED, do following
+        // (i)  Change color of parent and uncle as BLACK
+        // (ii) Change color of grandparent as RED
+        // (iii) Move z to grandparent
+        if (y->color == 'R')
+        {
             y->color = 'B';
             z->parent->color = 'B';
             z->parent->parent->color = 'R';
             z = z->parent->parent;
         }
-        else {
-            if (z->parent == z->parent->parent->left && z == z->parent->left){
+ 
+        // Uncle is BLACK, there are four cases (LL, LR, RL and RR)
+        else if (y->color == 'B'){
+            // Left-Left (LL) case, do following
+            // (i)  Swap color of parent and grandparent
+            // (ii) Right Rotate Grandparent
+            if (z->parent == z->parent->parent->left && z == z->parent->left)
+            {
                 char ch = z->parent->color;
                 z->parent->color = z->parent->parent->color;
                 z->parent->parent->color = ch;
-                rightRotate(root, z->parent->parent);
+                rightRotate(root,z->parent->parent);
             }
 
-            if (z->parent == z->parent->parent->left && z == z->parent->right){
+            // Left-Right (LR) case, do following
+            // (i)  Swap color of current node  and grandparent
+            // (ii) Left Rotate Parent
+            // (iii) Right Rotate Grand Parent
+            if (z->parent == z->parent->parent->left && z == z->parent->right)
+            {
                 char ch = z->color ;
                 z->color = z->parent->parent->color;
                 z->parent->parent->color = ch;
                 leftRotate(root,z->parent);
                 rightRotate(root,z->parent->parent);
             }
-
+ 
+            // Right-Right (RR) case, do following
+            // (i)  Swap color of parent and grandparent
+            // (ii) Left Rotate Grandparent
             if (z->parent == z->parent->parent->right && z == z->parent->right)
             {
                 char ch = z->parent->color ;
@@ -114,7 +125,11 @@ void insertFixup(struct node **root, struct node *z){
                 z->parent->parent->color = ch;
                 leftRotate(root,z->parent->parent);
             }
-
+ 
+            // Right-Left (RL) case, do following
+            // (i)  Swap color of current node  and grandparent
+            // (ii) Right Rotate Parent
+            // (iii) Left Rotate Grand Parent
             if (z->parent == z->parent->parent->right && z == z->parent->left)
             {
                 char ch = z->color ;
@@ -124,8 +139,11 @@ void insertFixup(struct node **root, struct node *z){
                 leftRotate(root,z->parent->parent);
             }
         }
+        else if (y == NULL && y->parent == *root){
+            
+        }
     }
-    (*root)->color = 'B';
+    (*root)->color = 'B'; //keep root always black
 }
 void rbInsert(struct node **root, int data){
     // Allocate memory for new node
@@ -162,22 +180,33 @@ void rbInsert(struct node **root, int data){
  
         // call insertFixUp to fix reb-black tree's property if it
         // is voilated due to insertion.
+        inorder(*root);
+        printf("\n-------------------------------------------------------------------------------------\n");
         insertFixup(root,z);
     }
-}
-void inorder(struct node *root)
-{
-    if (root == NULL)
-        return;
-    inorder(root->left);
-    printf("%d ", root->data);
-    inorder(root->right);
 }
 void rbDelete(){
 
 }
-void rbPrint(){
 
+void input(char name[], char source[], char dest[], int date){
+    int i = 1;
+    struct node *root = NULL;
+    while (i != 4){
+        printf("input your name, source, destination, and date in order:\n");
+        while (scanf("%10[^,], %1[^,], %1[^,], %d", name, source, dest, &date) == 4){
+            printf("----------------------------------------------------------------------------------\n");
+            printf("Before insertion:\n");
+            inorder(root);
+            printf("\n");
+            printf("After insertion\n");
+            rbInsert(&root, i);
+            inorder(root);
+            printf("\n\n");
+            break;
+        }
+        i++;
+    }
 }
 
 int main(){
@@ -185,14 +214,12 @@ int main(){
     int date; 
 
     struct node *root = NULL;
-    rbInsert(&root, 10);
-    rbInsert(&root, 20);
-    rbInsert(&root, 5);
-    rbInsert(&root, 15);
-    rbInsert(&root, 30);
+    rbInsert(&root, 1);
+    rbInsert(&root, 2);
+    rbInsert(&root, 3);
 
     inorder(root);
-
+    
     //input(name, source, dest, date);
     
     return 0;
