@@ -5,6 +5,13 @@
 #define NAME 10
 #define MAX 30
 
+struct node {
+    int data;
+    char color;
+
+    struct node *left, *right, *parent;
+};
+
 void input(char name[], char source[], char dest[], int date){
     int i = 0;
     while (i != 11){
@@ -21,6 +28,51 @@ void input(char name[], char source[], char dest[], int date){
         }
         i++;
     }
+}
+
+void leftRotate(struct node **root, struct node *x){
+    struct node *y = x->right;
+    x->right = y->left;
+
+    if (x->right != NULL){
+        x->right->parent = x;
+    }
+    y->parent = x->parent;
+    
+    if (x->right == NULL){
+        (*root) = y;
+    }
+    else if (x == x->parent->left){
+        x->parent->left = y;
+    }
+    else {
+        x->parent->right = y;
+    }
+
+    y->left = x;
+    x->parent = y;
+}
+void rightRotate(struct node **root, struct node *y){
+    struct node *x = y->right;
+    y->right = x->left;
+
+    if (x->right != NULL){
+        x->right->parent = x;
+    }
+    x->parent = y->parent;
+    
+    if (x->right == NULL){
+        (*root) = x;
+    }
+    else if (y == y->parent->left){
+        y->parent->left = x;
+    }
+    else {
+        y->parent->right = x;
+    }
+
+    x->right = y;
+    y->parent = x;
 }
 
 void rbInsert(){
