@@ -128,7 +128,50 @@ void insertFixup(struct node **root, struct node *z){
     (*root)->color = 'B';
 }
 void rbInsert(struct node **root, int data){
-    
+    // Allocate memory for new node
+    struct node *z = (struct node*)malloc(sizeof(struct node));
+    z->data = data;
+    z->left = z->right = z->parent = NULL;
+ 
+     //if root is null make z as root
+    if (*root == NULL){
+        z->color = 'B';
+        (*root) = z;
+    }
+    else {
+        struct node *y = NULL;
+        struct node *x = (*root);
+ 
+        // Follow standard BST insert steps to first insert the node
+        while (x != NULL){
+            y = x;
+            if (z->data < x->data)
+                x = x->left;
+            else
+                x = x->right;
+        }
+        z->parent = y;
+        if (z->data > y->data){
+            y->right = z;
+        }
+        else{
+            y->left = z;
+        }
+
+        z->color = 'R';
+ 
+        // call insertFixUp to fix reb-black tree's property if it
+        // is voilated due to insertion.
+        insertFixUp(root,z);
+    }
+}
+void inorder(struct node *root)
+{
+    if (root == NULL)
+        return;
+    inorder(root->left);
+    printf("%d ", root->data);
+    inorder(root->right);
 }
 void rbDelete(){
 
