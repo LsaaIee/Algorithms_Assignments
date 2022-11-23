@@ -11,7 +11,7 @@ struct node {
 
     struct node *left, *right, *parent;
 };
-
+/*
 void input(char name[], char source[], char dest[], int date){
     int i = 0;
     while (i != 11){
@@ -29,7 +29,7 @@ void input(char name[], char source[], char dest[], int date){
         i++;
     }
 }
-
+*/
 void leftRotate(struct node **root, struct node *x){
     struct node *y = x->right;
     x->right = y->left;
@@ -162,7 +162,7 @@ void rbInsert(struct node **root, int data){
  
         // call insertFixUp to fix reb-black tree's property if it
         // is voilated due to insertion.
-        insertFixUp(root,z);
+        insertFixup(root,z);
     }
 }
 void inorder(struct node *root)
@@ -184,7 +184,16 @@ int main(){
     char name[NAME], source[2], dest[2];
     int date; 
 
-    input(name, source, dest, date);
+    struct node *root = NULL;
+    rbInsert(&root, 10);
+    rbInsert(&root, 20);
+    rbInsert(&root, 5);
+    rbInsert(&root, 15);
+    rbInsert(&root, 30);
+
+    inorder(root);
+
+    //input(name, source, dest, date);
     
     return 0;
 }
