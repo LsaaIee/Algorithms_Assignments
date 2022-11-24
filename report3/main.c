@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <time.h>
 #define NAME 10
 #define MAX 30
 
@@ -65,39 +64,43 @@ void rightRotate(struct node **root, struct node *y){
     y->parent = x;
 }
 void insertFixup(struct node **root, struct node *z){
-    while (z->parent->color == 'R'){
-        struct node *y;
+    while (z->parent->color == 'R' && z != *root){
+        struct node *y = NULL;
         if (z->parent == z->parent->parent->left){
             y = z->parent->parent->right;
-            if (y->color == 'R'){
+            if (y != NULL && y->color == 'R'){
                 z->parent->color = 'B';
                 y->color = 'B';
                 z->parent->parent->color = 'R';
                 z = z->parent->parent;
             }
-            else if (z == z->parent->right){
-                z = z->parent;
-                leftRotate(root, z);
+            else {
+                if (z == z->parent->right){
+                    z = z->parent;
+                    leftRotate(root, z);
+                }
+                z->parent->color = 'B';
+                z->parent->parent->color = 'R';
+                rightRotate(root, z->parent->parent);
             }
-            z->parent->color = 'B';
-            z->parent->parent->color = 'R';
-            rightRotate(root, z->parent->parent);
         }
         else {
             y = z->parent->parent->left;
-            if (y->color == 'R'){
+            if (y != NULL && y->color == 'R'){
                 z->parent->color = 'B';
                 y->color = 'B';
                 z->parent->parent->color = 'R';
                 z = z->parent->parent;
             }
-            else if (z == z->parent->left){
-                z = z->parent;
-                rightRotate(root, z);
+            else {
+                if (z == z->parent->left){
+                    z = z->parent;
+                    rightRotate(root, z);
+                }
+                z->parent->color = 'B';
+                z->parent->parent->color = 'R';
+                leftRotate(root, z->parent->parent);
             }
-            z->parent->color = 'B';
-            z->parent->parent->color = 'R';
-            leftRotate(root, z->parent->parent);
         }
     }
     (*root)->color = 'B';
@@ -135,6 +138,7 @@ void rbInsert(struct node **root, int data){
         insertFixup(root, z);
     }
 }
+/*
 void deleteFixup(struct node **root, struct node *x){
     while (x != root && x->color = 'B'){
         struct node *w;
@@ -200,11 +204,31 @@ void rbDelete(struct node **root, int data){
         
     }
 }
-
+*/
+void randGraph(){
+    char graph[27];
+    srand(time(NULL));
+	for(int i = 0; i < 27; i++){
+        int check = 0;
+        char c = (rand()%(122-97)+97);
+        int j;
+        for (j = 0; j < i; j++){
+            if (graph[j] == c){
+                check = 1;
+                i--;
+                break;
+            }
+        }
+        if (check != 1){
+            graph[i] = c;
+            printf("%c", graph[i]);
+        }
+    }
+}
 void input(char name[], char source[], char dest[], int date){
     int i = 1;
     struct node *root = NULL;
-    while (i != 5){
+    while (i != 11){
         printf("input your name, source, destination, and date in order:\n");
         while (scanf("%10[^,], %1[^,], %1[^,], %d", name, source, dest, &date) == 4){
             printf("----------------------------------------------------------------------------------\n");
@@ -223,16 +247,9 @@ void input(char name[], char source[], char dest[], int date){
 
 int main(){
     char name[NAME], source[2], dest[2];
-    int date; 
-    /*
-    struct node *root = NULL;
-    rbInsert(&root, 1);
-    rbInsert(&root, 2);
-    rbInsert(&root, 3);
-
-    inorder(root);
-    */
-    input(name, source, dest, date);
+    int date;
     
+    //input(name, source, dest, date);
+    randGraph();
     return 0;
 }
