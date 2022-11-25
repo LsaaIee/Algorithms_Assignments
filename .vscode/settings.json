@@ -2,6 +2,8 @@
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
         "alsdf": "c",
-        "test": "c"
+        "test": "c",
+        "REPORT~2.C": "cpp",
+        "REPORT~3.C": "cpp"
     }
 }
